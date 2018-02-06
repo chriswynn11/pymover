@@ -1,29 +1,41 @@
 import os
+import getpass
+import shutil
+
+username = getpass.getuser()
+print username
 
 looping = True
-files_tomove = [""]
+files_tomove = []
 cur_file = ""
-directory = raw_input("Enter Directory you want to move files (leave blank if you want to use current directory)\n>")
+directory = raw_input("Enter Directory you want to move files from (leave blank if you want to use pymover's directory) or press E to exit\n>")
 break_loop = False
-
+if directory.upper() == "E":
+    quit()
 if directory is "":
     directory = os.getcwd()
-    
+print ""
 files_arr = os.listdir(directory)
-print files_arr[0]
+if len(files_arr) < 1:
+    print "No file in directory! Exiting pymover"
+    quit()
 
 files_search = raw_input("Enter file you wish to search for and move (leave blank if all)\n>")
+str(files_search)
 
-if files_search is "":
-    files_tomove = os.listdir(directory)
+print ""
 x = 0
 for i in range(len(files_arr)):
     if files_search in files_arr[i]:
-        files_tomove.append(files_arr)
+        files_tomove.append(files_arr[i])
         x = x + 1
-
+    elif files_search is "":
+        files_tomove = os.listdir(directory)
 print str(x) + " Files in search. Names: "
 print files_tomove
+folder_tomove = raw_input("Enter directory to move to\n>")
+str(folder_tomove)
+print "Moving to folder " + folder_tomove
 for i2 in range(len(files_tomove)):
     print ""
     looping = True
@@ -34,6 +46,7 @@ for i2 in range(len(files_tomove)):
         if y_or_n.upper() == "Y" or y_or_n.upper() == "YES":
             print "Moving..."
             looping = False
+            shutil.move(directory + '/' + files_tomove[i2],folder_tomove)
             #Move code goes here
         elif y_or_n.upper() == "N" or y_or_n.upper() == "NO":
             looping = False
@@ -48,7 +61,8 @@ for i2 in range(len(files_tomove)):
             exit()
         else:
             print "ERROR: enter proper input"
+            print ""
             looping = True
-    if break_loop is True:
+    if break_loop == True:
         break
 print "Done!"
